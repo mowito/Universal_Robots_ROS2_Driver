@@ -58,10 +58,10 @@ mesh_files:
 
   wrist_3:
     visual:
-      mesh: "package://ur_description/meshes/ur5e/visual/wrist3.dae"
+      mesh: "package://ur_description/meshes/ur5e/visual/wrist3_bin_picking_kit.dae"
       material:
         name: "LightGrey"
         color: "0.7 0.7 0.7 1.0"
     collision:
-      mesh: "package://ur_description/meshes/ur5e/collision/wrist3.stl"
+      mesh: "package://ur_description/meshes/ur5e/collision/wrist3_bin_picking_kit.stl"
     visual_offset: -0.0989
