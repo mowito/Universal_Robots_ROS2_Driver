@@ -303,7 +303,8 @@ def generate_launch_description():
         robot_state_publisher_node,
         rviz_node,
         joint_state_broadcaster_spawner,
-        io_and_status_controller_spawner,        
+        io_and_status_controller_spawner,
+        speed_scaling_state_broadcaster_spawner,
         force_torque_sensor_broadcaster_spawner,
         robot_controller_spawner,
     ]
