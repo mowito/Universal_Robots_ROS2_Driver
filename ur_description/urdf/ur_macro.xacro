@@ -351,9 +351,17 @@
     <link name="${prefix}tool0"/>
     <joint name="${prefix}flange-tool0" type="fixed">
       <!-- default toolframe - X+ left, Y+ up, Z+ front --><!--sv - this convention does not hold anymore -->
-      <origin xyz="0.2949 0.0493 0" rpy="0 0 0"/>
+      <origin xyz="0.343 0 0" rpy="${pi/2.0} 0 ${pi/2.0}"/>
       <parent link="${prefix}flange"/>
       <child link="${prefix}tool0"/>
+    </joint>
+    <!-- sv 'tool1' elbow joint -->
+    <link name="${prefix}tool1"/>
+    <joint name="${prefix}tool0-tool1" type="fixed">
+      <!-- default toolframe - X+ left, Y+ up, Z+ front --><!--sv - this convention does not hold anymore -->
+      <origin xyz="0.0493 0 -0.0481" rpy="0 0 0"/>
+      <parent link="${prefix}tool0"/>
+      <child link="${prefix}tool1"/>
     </joint>
   </xacro:macro>
 </robot>

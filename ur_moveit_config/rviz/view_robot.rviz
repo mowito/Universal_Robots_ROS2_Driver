@@ -105,6 +105,10 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+          tool1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           upper_arm_link:
             Alpha: 1
             Show Axes: false
@@ -198,6 +202,10 @@ Visualization Manager:
             Show Trail: false
             Value: true
           tool0:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          tool1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
