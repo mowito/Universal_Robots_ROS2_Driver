@@ -21,26 +21,8 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-import os
-import yaml
-from ament_index_python.packages import get_package_share_directory
-
-
-
-def load_yaml(package_name, file_path):
-    package_path = get_package_share_directory(package_name)
-    absolute_file_path = os.path.join(package_path, file_path)
-
-    try:
-        with open(absolute_file_path) as file:
-            return yaml.safe_load(file)
-    except OSError:  # parent of IOError, OSError *and* WindowsError where available
-        return None
-
-
 
 def generate_launch_description():
-    print("well well well...")
     declared_arguments = []
     # UR specific arguments
     declared_arguments.append(
@@ -139,34 +121,23 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "moveit_config_package",
-            default_value="ur_moveit_config",
-            description="MoveIt config package with robot SRDF/XACRO files. Usually the argument \
-        is not set, it enables use of a custom moveit config.",
-        )
-    )
 
-
+    # Initialize Arguments
     ur_type = LaunchConfiguration("ur_type")
     robot_ip = LaunchConfiguration("robot_ip")
     safety_limits = LaunchConfiguration("safety_limits")
     safety_pos_margin = LaunchConfiguration("safety_pos_margin")
     safety_k_position = LaunchConfiguration("safety_k_position")
     # General arguments
+    runtime_config_package = LaunchConfiguration("runtime_config_package")
+    controllers_file = LaunchConfiguration("controllers_file")
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
-    moveit_config_package = LaunchConfiguration("moveit_config_package")
-    moveit_config_file = LaunchConfiguration("moveit_config_file")
     prefix = LaunchConfiguration("prefix")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
-    launch_rviz = LaunchConfiguration("launch_rviz")
-    runtime_config_package = LaunchConfiguration("runtime_config_package")
-    controllers_file = LaunchConfiguration("controllers_file")
     robot_controller = LaunchConfiguration("robot_controller")
-
+    launch_rviz = LaunchConfiguration("launch_rviz")
 
     joint_limit_params = PathJoinSubstitution(
         [FindPackageShare(description_package), "config", ur_type, "joint_limits.yaml"]
@@ -243,74 +214,7 @@ def generate_launch_description():
             " ",
         ]
     )
-    
     robot_description = {"robot_description": robot_description_content}
-    print(robot_description)
-
-    robot_description_semantic_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [FindPackageShare(moveit_config_package), "srdf", moveit_config_file]
-            ),
-            " ",
-            "name:=",
-            # Also ur_type parameter could be used but then the planning group names in yaml
-            # configs has to be updated!
-            "ur",
-            " ",
-            "prefix:=",
-            prefix,
-            " ",
-        ]
-    )
-    robot_description_semantic = {"robot_description_semantic": robot_description_semantic_content}
-
-    kinematics_yaml = load_yaml("ur_moveit_config", "config/kinematics.yaml")
-    robot_description_kinematics = {"robot_description_kinematics": kinematics_yaml}
-
-    # Planning Configuration
-    ompl_planning_pipeline_config = {
-        "move_group": {
-            "planning_plugin": "ompl_interface/OMPLPlanner",
-            "request_adapters": """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
-            "start_state_max_bounds_error": 0.1,
-        }
-    }
-    ompl_planning_yaml = load_yaml("ur_moveit_config", "config/ompl_planning.yaml")
-    ompl_planning_pipeline_config["move_group"].update(ompl_planning_yaml)
-
-    # Trajectory Execution Configuration
-    controllers_yaml = load_yaml("ur_moveit_config", "config/controllers.yaml")
-    moveit_controllers = {
-        "moveit_simple_controller_manager": controllers_yaml,
-        "moveit_controller_manager": "moveit_simple_controller_manager/MoveItSimpleControllerManager",
-    }
-
-    trajectory_execution = {
-        "moveit_manage_controllers": False,
-        "trajectory_execution.allowed_execution_duration_scaling": 1.2,
-        "trajectory_execution.allowed_goal_duration_margin": 0.5,
-        "trajectory_execution.allowed_start_tolerance": 0.01,
-    }
-
-    planning_scene_monitor_parameters = {
-        "publish_planning_scene": True,
-        "publish_geometry_updates": True,
-        "publish_state_updates": True,
-        "publish_transforms_updates": True,
-        "planning_scene_monitor_options": {
-            "name": "planning_scene_monitor",
-            "robot_description": "robot_description",
-            "joint_state_topic": "/joint_states",
-            "attached_collision_object_topic": "/move_group/planning_scene_monitor",
-            "publish_planning_scene_topic": "/move_group/publish_planning_scene",
-            "monitored_planning_scene_topic": "/move_group/monitored_planning_scene",
-            "wait_for_initial_state_timeout": 10.0,
-        },
-    }
-
 
     robot_controllers = PathJoinSubstitution(
         [FindPackageShare(runtime_config_package), "config", controllers_file]
@@ -393,21 +297,6 @@ def generate_launch_description():
         arguments=[robot_controller, "-c", "/controller_manager"],
     )
 
-    move_group_node = Node(
-        package="moveit_ros_move_group",
-        executable="move_group",
-        output="screen",
-        parameters=[
-            robot_description,
-            robot_description_semantic,
-            robot_description_kinematics,
-            ompl_planning_pipeline_config,
-            trajectory_execution,
-            moveit_controllers,
-            planning_scene_monitor_parameters,
-        ],
-    )
-
     nodes_to_start = [
         control_node,
         dashboard_client_node,
@@ -421,6 +310,3 @@ def generate_launch_description():
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)
-
-print("well well...")
-generate_launch_description()
