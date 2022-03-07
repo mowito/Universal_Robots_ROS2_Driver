@@ -359,7 +359,7 @@
     <link name="${prefix}tool1"/>
     <joint name="${prefix}tool0-tool1" type="fixed">
       <!-- default toolframe - X+ left, Y+ up, Z+ front --><!--sv - this convention does not hold anymore -->
-      <origin xyz="0.0571 0.0353 -0.0305" rpy="0 0 0"/> <!--origin xyz="0.055,0.0233,-0.0526" rpy="0 0 0" -->
+      <origin xyz="0.0547 0.0282 -0.0445" rpy="0 0 0"/> <!--origin xyz="0.055,0.0233,-0.0526" rpy="0 0 0" -->
       <parent link="${prefix}tool0"/>
       <child link="${prefix}tool1"/>
     </joint>
