@@ -355,5 +355,13 @@
       <parent link="${prefix}flange"/>
       <child link="${prefix}tool0"/>
     </joint>
+    <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
+    <link name="${prefix}tool1"/>
+    <joint name="${prefix}tool0-tool1" type="fixed">
+      <!-- default toolframe - X+ left, Y+ up, Z+ front -->
+      <origin xyz="0.0 0 0" rpy="0.0 0 0.0"/>
+      <parent link="${prefix}tool0"/>
+      <child link="${prefix}tool1"/>
+    </joint>
   </xacro:macro>
 </robot>
