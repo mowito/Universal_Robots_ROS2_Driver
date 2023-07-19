@@ -29,7 +29,7 @@
           <param name="servoj_gain">2000</param>
           <param name="servoj_lookahead_time">0.03</param>
           <param name="use_tool_communication">0</param>
-          <param name="kinematics/hash">"${hash_kinematics}"</param>
+          <param name="kinematics/hash">${hash_kinematics}</param>
           <param name="tool_voltage">0</param>
           <param name="tool_parity">0</param>
           <param name="tool_baud_rate">115200</param>
@@ -244,7 +244,12 @@
         <state_interface name="safety_status_bit_8"/>
         <state_interface name="safety_status_bit_9"/>
         <state_interface name="safety_status_bit_10"/>
+        <state_interface name="program_running"/>
       </joint>
+
+      <gpio name="system_interface">
+        <state_interface name="initialized"/>
+      </gpio>
 
     </ros2_control>
   </xacro:macro>

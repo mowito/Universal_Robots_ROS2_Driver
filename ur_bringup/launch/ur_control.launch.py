@@ -16,7 +16,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -236,11 +236,30 @@ def generate_launch_description():
 
     dashboard_client_node = Node(
         package="ur_robot_driver",
+        condition=UnlessCondition(use_fake_hardware),
         executable="dashboard_client",
         name="dashboard_client",
         output="screen",
         emulate_tty=True,
         parameters=[{"robot_ip": robot_ip}],
+    )
+
+    controller_stopper_node = Node(
+        package="ur_robot_driver",
+        executable="controller_stopper_node",
+        name="controller_stopper",
+        output="screen",
+        emulate_tty=True,
+        parameters=[
+            {
+                "consistent_controllers": [
+                    "io_and_status_controller",
+                    "force_torque_sensor_broadcaster",
+                    "joint_state_broadcaster",
+                    "speed_scaling_state_broadcaster",
+                ]
+            },
+        ],
     )
 
     robot_state_publisher_node = Node(
@@ -300,6 +319,7 @@ def generate_launch_description():
     nodes_to_start = [
         control_node,
         dashboard_client_node,
+        controller_stopper_node,
         robot_state_publisher_node,
         rviz_node,
         joint_state_broadcaster_spawner,
