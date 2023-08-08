@@ -356,13 +356,20 @@
       <child link="${prefix}tool0"/>
     </joint>
 
+    <link name="${prefix}camera_color_optical_frame1"/>
+    <joint name="${prefix}wrist_3-camera_color_optical_frame1" type="fixed">
+      <origin xyz="0.025 -0.082 0.034" rpy="0.0035171 0.0642818 0.7902383"/>
+      <parent link="${prefix}wrist_3_link"/>
+      <child link="${prefix}camera_color_optical_frame1"/>
+    </joint>
+
     <link name="${prefix}camera_color_optical_frame"/>
-    <joint name="${prefix}flange-camera_color_optical_frame" type="fixed">
-      <!-- default toolframe - X+ left, Y+ up, Z+ front -->
-      <origin xyz="0.0358305850983095 0.024214241762794915 -0.08249533085075297" rpy="-2.4057309 1.5051829 -1.5154178"/>
-      <parent link="${prefix}flange"/>
+    <joint name="${prefix}tool0-camera_color_optical_frame" type="fixed">
+      <origin xyz="0.025316732076068958 -0.08219936857804473 -0.5655037992448424" rpy="0.0475148 0.0432808 0.7909686"/>
+      <parent link="${prefix}tool0"/>
       <child link="${prefix}camera_color_optical_frame"/>
     </joint>
+
 
     <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
     <link name="${prefix}tool1"/>
