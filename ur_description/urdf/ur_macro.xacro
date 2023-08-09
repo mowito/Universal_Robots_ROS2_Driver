@@ -349,26 +349,35 @@
 
     <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
     <link name="${prefix}tool0"/>
-    <joint name="${prefix}flange-tool0" type="fixed">
+    <joint name="${prefix}wrist_3-tool0" type="fixed">
       <!-- default toolframe - X+ left, Y+ up, Z+ front -->
-      <origin xyz="0.600 0 0" rpy="${pi/2.0} 0 ${pi/2.0}"/>
-      <parent link="${prefix}flange"/>
+      <origin xyz="-0.023 0.016 0.318" rpy="-0.0511685 0.0285234 2.3987783"/>
+      <parent link="${prefix}wrist_3_link"/>
       <child link="${prefix}tool0"/>
     </joint>
 
     <link name="${prefix}camera_color_optical_frame1"/>
     <joint name="${prefix}wrist_3-camera_color_optical_frame1" type="fixed">
-      <origin xyz="0.025 -0.082 0.034" rpy="0.0035171 0.0642818 0.7902383"/>
+      <origin xyz="0.023951330579827648 -0.08148942116607773 0.03379282985859283" rpy="0.0478417 0.0445253 0.7901463"/>
       <parent link="${prefix}wrist_3_link"/>
       <child link="${prefix}camera_color_optical_frame1"/>
     </joint>
 
-    <link name="${prefix}camera_color_optical_frame"/>
-    <joint name="${prefix}tool0-camera_color_optical_frame" type="fixed">
-      <origin xyz="0.025316732076068958 -0.08219936857804473 -0.5655037992448424" rpy="0.0475148 0.0432808 0.7909686"/>
-      <parent link="${prefix}tool0"/>
-      <child link="${prefix}camera_color_optical_frame"/>
+    <link name="${prefix}realsense_frame"/>
+    <joint name="${prefix}camera_color_optical_frame1-realsense_frame" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}camera_color_optical_frame1"/>
+      <child link="${prefix}realsense_frame"/>
     </joint>
+
+    <link name="${prefix}camera_color_optical_frame11"/>
+    <joint name="${prefix}tool0-camera_color_optical_frame11" type="fixed">
+      <origin xyz="-0.097 0.024 -0.287" rpy="-0.0132149 -0.064089 -1.6079909"/>
+      <parent link="${prefix}tool0"/>
+      <child link="${prefix}camera_color_optical_frame11"/>
+    </joint>
+
+
 
 
     <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
