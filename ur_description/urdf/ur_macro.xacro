@@ -351,7 +351,7 @@
     <link name="${prefix}tool0"/>
     <joint name="${prefix}wrist_3-tool0" type="fixed">
       <!-- default toolframe - X+ left, Y+ up, Z+ front -->
-      <origin xyz="-0.023 0.016 0.318" rpy="-0.0511685 0.0285234 2.3987783"/>
+      <origin xyz="0 0 0.318" rpy="-0.0511685 0.0285234 2.3987783"/>
       <parent link="${prefix}wrist_3_link"/>
       <child link="${prefix}tool0"/>
     </joint>
